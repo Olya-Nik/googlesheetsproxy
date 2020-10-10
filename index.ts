@@ -52,9 +52,7 @@ app.get("/cell", async (req: RequestCell, res: Response) => {
     res.send(cellValue)
 })
 
-
-
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 app.listen(port, (err?: any) => {
     if (err) throw err
     console.log(`Listen on: ${port}`)
