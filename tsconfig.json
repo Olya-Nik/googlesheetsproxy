@@ -3,6 +3,5 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "lib": [ "es2015",  "es6", "dom" ],
-    
     }
 }
