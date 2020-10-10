@@ -1,7 +1,7 @@
 import express, { Response } from "express"
 import { GoogleSpreadsheet } from "google-spreadsheet"
 import dotenv from "dotenv"
-import rt from "runtypes"
+import * as rt from "runtypes"
 
 dotenv.config()
 
