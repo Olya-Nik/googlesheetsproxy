@@ -1,19 +1,25 @@
 import express, { Response } from "express"
 import { GoogleSpreadsheet } from "google-spreadsheet"
 import dotenv from "dotenv"
+import rt from "runtypes"
+
 dotenv.config()
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 const key = process.env.GOOGLE_API_KEY
-interface QueryList {
-    doc: string
-}
-interface RequestList {
-    query: QueryList
-}
-app.get("/lists", async (req: RequestList, res: Response) => {
-    const doc = new GoogleSpreadsheet(req.query.doc)
+
+const ListQuery = rt.Record({
+    doc: rt.String,
+})
+app.get("/lists", async (req, res) => {
+    const query = ListQuery.validate(req.query)
+    if (!query.success)
+        return res.status(400).json({ error: query })
+        
+    const doc = new GoogleSpreadsheet(query.value.doc)
     doc.useApiKey(key)
     await doc.loadInfo()
     interface Sheet {
