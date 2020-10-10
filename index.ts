@@ -22,10 +22,7 @@ app.get("/lists", async (req, res) => {
     const doc = new GoogleSpreadsheet(query.value.doc)
     doc.useApiKey(key)
     await doc.loadInfo()
-    interface Sheet {
-        title: string
-    }
-    const list = doc.sheetsByIndex.map((item: Sheet): string => item.title)
+    const list = doc.sheetsByIndex.map(item => item.title)
     res.send(list)
 })
 
@@ -47,7 +44,7 @@ app.get("/cell", async (req: RequestCell, res: Response) => {
     const sheet = doc.sheetsByTitle[req.query.list.toString()]
     const cellName = req.query.col + req.query.row
     await sheet.loadCells(cellName)
-    const cellValue: string = sheet.getCellByA1(cellName).value.toString()
+    const cellValue = sheet.getCellByA1(cellName).value.toString()
 
     res.send(cellValue)
 })
