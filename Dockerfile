@@ -5,12 +5,17 @@ FROM node:14
 # создаём директорию /app и все дальнейшие операции производим в ней
 WORKDIR /app
 
-# копируем все файлы проекта в /app
-COPY . /app/
+# копируем файлы со списком зависимостей
+COPY package.json package.json
+# COPY package-lock.json package-lock.json
+COPY yarn.lock yarn.lock
 
 # устанавливаем зависимости
 RUN yarn
 # RUN npm install
+
+# копируем все файлы проекта в /app
+COPY . /app/
 
 # выводим список всех файлов в директории /app (для теста)
 # RUN ls -la
