@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +15,7 @@
     "@types/google-spreadsheet": "^3.0.1",
     "express": "^4.17.1",
     "google-spreadsheet": "^3.0.13",
+    "runtypes": "^5.0.1",
     "ts-node": "^9.0.0"
   },
   "devDependencies": {
