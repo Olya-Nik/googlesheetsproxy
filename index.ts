@@ -9,7 +9,12 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const key = process.env.GOOGLE_API_KEY
+const ApiKey = rt.String
+const processKey = ApiKey.validate(process.env.GOOGLE_API_KEY)
+if (!processKey.success) {
+    throw new Error("Error api key")
+}
+const key = processKey.value
 
 const ListQuery = rt.Record({
     doc: rt.String,
@@ -26,23 +31,23 @@ app.get("/lists", async (req, res) => {
     res.send(list)
 })
 
-interface QueryCell {
-    col: string,
-    row: string,
-    list: string,
-    doc: string,
+const CellQuery = rt.Record({
+    col: rt.String,
+    row: rt.String,
+    list: rt.String,
+    doc: rt.String,
+})
 
-}
-interface RequestCell {
-    query: QueryCell
-}
+app.get("/cell", async (req, res) => {
+    const query = CellQuery.validate(req.query)
+    if(!query.success) 
+        return res.status(400).json({ error: query })
 
-app.get("/cell", async (req: RequestCell, res: Response) => {
-    const doc = new GoogleSpreadsheet(req.query.doc)
+    const doc = new GoogleSpreadsheet(query.value.doc)
     doc.useApiKey(key)
     await doc.loadInfo()
-    const sheet = doc.sheetsByTitle[req.query.list.toString()]
-    const cellName = req.query.col + req.query.row
+    const sheet = doc.sheetsByTitle[query.value.list]
+    const cellName = query.value.col + query.value.row
     await sheet.loadCells(cellName)
     const cellValue = sheet.getCellByA1(cellName).value.toString()
 
